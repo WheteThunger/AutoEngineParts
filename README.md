@@ -9,17 +9,17 @@
 
 ## Installation
 
-1. Add the plugin to your server
+1. Add the plugin to the `oxide/plugins` directory of your Rust server installation
 2. Update the config with the desired `DefaultEnginePartsTier` (use `3` for high quality parts)
 3. Reload the plugin
 
-Engine parts will be automatically added to all existing engine modules. Any engine parts that were already present in engine modules will be dropoped to the ground because players may have worked hard to obtain them.
+Engine parts will be automatically added to all existing engine modules. Any engine parts that were already present in engine modules will be dropped to the ground because players may have worked hard to obtain them.
 
-If desired, you can make free engine parts only apply to cars owned by players with permissions, and/or make such cars have higher quality parts than the default.
+If desired, you can make this plugin only apply to cars owned by players with permissions, and/or make such cars have higher quality parts than the default. Be sure to reload the plugin after granting permissions to automatically add engine parts to existing cars.
 
 ## Configuration
 
-Default configuration (no free engine parts):
+Default configuration (no engine parts are added):
 
 ```json
 {
@@ -27,8 +27,8 @@ Default configuration (no free engine parts):
 }
 ```
 
-- `DefaultEnginePartsTier` (`0` - `3`) -- The quality of engine parts to automatically add to all engine modules (`0` for no engine parts). Players with permission can have higher quality parts than this applied to cars they own (see permissions section for details).
-  - 0 = No free parts (existing parts are untouched), engine containers are unlocked
+- `DefaultEnginePartsTier` (`0` - `3`) -- The quality of engine parts to automatically add to all engine modules. Players with permission can have higher quality parts than this applied to cars they own (see permissions section for details).
+  - 0 = No parts are added (existing parts are untouched), engine containers remain unlocked
   - 1 = Low quality parts, engine containers are locked
   - 2 = Medium quality parts, engine containers are locked
   - 3 = High quality parts, engine containers are locked
@@ -72,8 +72,8 @@ Simply remove the plugin. Free engine parts will be automatically removed, and l
 ## Developer Hooks
 
 - Called right before this plugin adds or removes parts from an engine storage container
-- Returning false will prevent this plugin from adding or removing engine parts
-- Returning null will allow this plugin to add or remove engine parts
+- Returning `false` will prevent this plugin from adding or removing engine parts
+- Returning `null` will allow this plugin to add or remove engine parts
 
 ```csharp
 object OnEngineStorageFill(EngineStorage engineStorage, int enginePartsTier)
