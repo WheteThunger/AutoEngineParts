@@ -59,9 +59,9 @@ This plugin is aggressive. It will replace engine parts in every car unless anot
 - [Spawn Modular Car](https://umod.org/plugins/spawn-modular-car) -- Compatible. Recommended to disable engine part features in that plugin because Auto Engine Parts will override them anyway.
 - [Bomb Trucks](https://umod.org/plugins/bomb-trucks) -- Compatible. Bomb trucks are specifically blocked from being affected by Auto Engine Parts.
 - [Claim Vehicle Ownership](https://umod.org/plugins/claim-vehicle-ownership) -- Compatible.
-  - When a player claims an unowned car, the engine parts will be automatically updated to match that player's permission.
-    - If the car already contained engine parts, they will be dropped next to the car because the player may have worked hard to obtain them.
-  - When a player unclaims a car, the engine parts will be reset to the defaults configured in Auto Engine Parts.
+  - When a player claims an unowned car, the engine parts will be automatically updated to match that player's permission if applicable.
+    - If the car already contains unlocked engine parts, they will be dropped next to the car because the player may have worked hard to obtain them.
+  - When a player unclaims a car that has locked engines, the engine parts will be reset to the defaults configured in Auto Engine Parts.
 - [Engine Parts Durability](https://umod.org/plugins/engine-parts-durability) -- Compatible. That plugin will not affect engine modules locked by Auto Engine Parts. Whenever Auto Engine Parts unlocks an engine module, Engine Parts Durability will resume control.
 - [No Engine Parts](https://umod.org/plugins/no-engine-parts) -- Compatible. If custom engine stats in that plugin are higher than what is provided by the engine parts in the module, then the engine parts provide no benefit other than to inform players that the car is ready to drive.
 
@@ -70,6 +70,8 @@ This plugin is aggressive. It will replace engine parts in every car unless anot
 Simply remove the plugin. Free engine parts will be automatically removed, and locked engine modules will be unlocked.
 
 ## Developer Hooks
+
+#### OnEngineStorageFill
 
 - Called right before this plugin adds or removes parts from an engine storage container
 - Returning `false` will prevent this plugin from adding or removing engine parts
