@@ -49,7 +49,7 @@ Note: Granting permissions or changing a user's group ownership will not automat
 
 **There is no such thing as car ownership in the vanilla Rust.** You will need another plugin to assign ownership to cars in order for the permissions in this plugin to be effective.
 
-Car ownership is determined by the `OwnerID` property of the car, which is usually a player's Steam ID, or `0` for no owner. Most plugins that spawn cars for a player (such as [Craft Car Chassis](https://umod.org/plugins/craft-car-chassis) and [Spawn Modular Car](https://umod.org/plugins/spawn-modular-car)) will assign that player as the owner. For cars spawned by the vanilla game, it's recommended to use [Claim Vehicle Ownership](https://umod.org/plugins/claim-vehicle-ownership) to allow players to claim them with a command on cooldown.
+Car ownership is determined by the `OwnerID` property of the car, which is usually a player's Steam ID, or `0` for no owner. Most plugins that spawn cars for a player (such as [Craft Car Chassis](https://umod.org/plugins/craft-car-chassis) and [Spawn Modular Car](https://umod.org/plugins/spawn-modular-car)) will assign that player as the owner. For cars spawned by the vanilla game, it's recommended to use [Claim Vehicle](https://umod.org/plugins/claim-vehicle) to allow players to claim them with a command on cooldown.
 
 ## Plugin compatibility
 
@@ -58,7 +58,7 @@ This plugin is aggressive. It will replace engine parts in every car unless anot
 - [Car Spawn Settings](https://umod.org/plugins/car-spawn-settings) -- Compatible. Unless you are using only the permissions feature of Auto Engine Parts, it's recommended to disable engine part features in Car Spawn Settings because Auto Engine Parts will override them anyway.
 - [Spawn Modular Car](https://umod.org/plugins/spawn-modular-car) -- Compatible. Recommended to disable engine part features in that plugin because Auto Engine Parts will override them anyway.
 - [Bomb Trucks](https://umod.org/plugins/bomb-trucks) -- Compatible. Bomb trucks are specifically blocked from being affected by Auto Engine Parts.
-- [Claim Vehicle Ownership](https://umod.org/plugins/claim-vehicle-ownership) -- Compatible.
+- [Claim Vehicle](https://umod.org/plugins/claim-vehicle) -- Compatible.
   - When a player claims an unowned car, the engine parts will be automatically updated to match that player's permission if applicable.
     - If the car already contains unlocked engine parts, they will be dropped next to the car because the player may have worked hard to obtain them.
   - When a player unclaims a car that has locked engines, the engine parts will be reset to the defaults configured in Auto Engine Parts.
