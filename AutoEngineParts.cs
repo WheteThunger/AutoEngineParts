@@ -46,7 +46,9 @@ namespace Oxide.Plugins
         private void OnServerInitialized()
         {
             foreach (var entity in BaseNetworkable.serverEntities)
+            {
                 MaybeUpdateEngineModule(entity as BaseVehicleModule, dropExistingParts: true);
+            }
 
             Subscribe(nameof(OnEntitySpawned));
         }
@@ -140,7 +142,9 @@ namespace Oxide.Plugins
             {
                 var engineStorage = GetEngineStorage(module);
                 if (engineStorage != null)
+                {
                     MaybeUpdateEngineStorage(engineStorage, enginePartsTier, dropExistingParts: true);
+                }
             }
         }
 
@@ -150,8 +154,7 @@ namespace Oxide.Plugins
 
         private static bool UpdateEngineStorageWasBlocked(EngineStorage engineStorage, int tier)
         {
-            object hookResult = Interface.CallHook("OnEngineStorageFill", engineStorage, tier);
-            return hookResult is bool && (bool)hookResult == false;
+            return Interface.CallHook("OnEngineStorageFill", engineStorage, tier) is false;
         }
 
         private static ulong GetCarOwnerId(BaseVehicleModule module)
@@ -169,8 +172,10 @@ namespace Oxide.Plugins
             return engineModule.GetContainer() as EngineStorage;
         }
 
-        private static bool IsLocked(EngineStorage engineStorage) =>
-            engineStorage.inventory.IsLocked();
+        private static bool IsLocked(EngineStorage engineStorage)
+        {
+            return engineStorage.inventory.IsLocked();
+        }
 
         private static void RemoveAllEngineParts(EngineStorage engineStorage)
         {
@@ -187,8 +192,7 @@ namespace Oxide.Plugins
 
         private static bool TryAddEngineItem(EngineStorage engineStorage, int slot, int tier)
         {
-            ItemModEngineItem output;
-            if (!engineStorage.allEngineItems.TryGetItem(tier, engineStorage.slotTypes[slot], out output))
+            if (!engineStorage.allEngineItems.TryGetItem(tier, engineStorage.slotTypes[slot], out var output))
                 return false;
 
             var component = output.GetComponent<ItemDefinition>();
@@ -205,7 +209,10 @@ namespace Oxide.Plugins
             return true;
         }
 
-        private static int Clamp(int x, int min, int max) => Math.Max(min, Math.Min(x, max));
+        private static int Clamp(int x, int min, int max)
+        {
+            return Math.Max(min, Math.Min(x, max));
+        }
 
         private void MaybeUpdateEngineModule(BaseVehicleModule module, bool dropExistingParts)
         {
@@ -220,7 +227,9 @@ namespace Oxide.Plugins
         private void MaybeUpdateEngineStorage(EngineStorage engineStorage, int enginePartsTier, bool dropExistingParts)
         {
             if (!UpdateEngineStorageWasBlocked(engineStorage, enginePartsTier))
+            {
                 UpdateEngineStorage(engineStorage, enginePartsTier, dropExistingParts);
+            }
         }
 
         private void UpdateEngineStorage(EngineStorage engineStorage, int desiredTier, bool dropExistingParts)
@@ -233,12 +242,16 @@ namespace Oxide.Plugins
             // If the storage was already locked, we assume the parts were free so we can safely delete them.
             // This may be less efficient than keeping/repairing the parts if they match the desired tier, but this keeps it simple.
             if (hasEngineParts && wasLocked)
+            {
                 RemoveAllEngineParts(engineStorage);
+            }
 
             if (desiredTier <= 0)
             {
                 if (wasLocked)
+                {
                     inventory.SetLocked(false);
+                }
 
                 ResetInternalDamageMultiplier(engineStorage);
                 return;
@@ -253,7 +266,9 @@ namespace Oxide.Plugins
                     engineStorage.DropItems();
                 }
                 else
+                {
                     RemoveAllEngineParts(engineStorage);
+                }
             }
 
             // This must be set first because adding items will trigger the OnItemLock hook which needs to see this flag.
@@ -263,7 +278,9 @@ namespace Oxide.Plugins
             for (var slot = 0; slot < inventory.capacity; slot++)
             {
                 if (!TryAddEngineItem(engineStorage, slot, desiredTier))
+                {
                     inventoryFilled = false;
+                }
             }
 
             if (!inventoryFilled)
@@ -280,9 +297,13 @@ namespace Oxide.Plugins
         private void ResetInternalDamageMultiplier(EngineStorage engineStorage)
         {
             if (EnginePartsDurability != null)
+            {
                 EnginePartsDurability.Call("API_RefreshMultiplier", engineStorage);
+            }
             else
+            {
                 engineStorage.internalDamageMultiplier = VanillaInternalDamageMultiplier;
+            }
         }
 
         private int GetOwnerEnginePartsTier(ulong ownerId)
@@ -296,12 +317,14 @@ namespace Oxide.Plugins
 
             if (permission.UserHasPermission(ownerIdString, PermissionTier3))
                 return 3;
-            else if (permission.UserHasPermission(ownerIdString, PermissionTier2))
+
+            if (permission.UserHasPermission(ownerIdString, PermissionTier2))
                 return Math.Max(2, defaultTier);
-            else if (permission.UserHasPermission(ownerIdString, PermissionTier1))
+
+            if (permission.UserHasPermission(ownerIdString, PermissionTier1))
                 return Math.Max(1, defaultTier);
-            else
-                return defaultTier;
+
+            return defaultTier;
         }
 
         #endregion
@@ -322,9 +345,7 @@ namespace Oxide.Plugins
 
         private Configuration GetDefaultConfig() => new Configuration();
 
-        #endregion
-
-        #region Configuration Boilerplate
+        #region Configuration Helpers
 
         private class SerializableConfiguration
         {
@@ -364,17 +385,14 @@ namespace Oxide.Plugins
 
         private bool MaybeUpdateConfigDict(Dictionary<string, object> currentWithDefaults, Dictionary<string, object> currentRaw)
         {
-            bool changed = false;
+            var changed = false;
 
             foreach (var key in currentWithDefaults.Keys)
             {
-                object currentRawValue;
-                if (currentRaw.TryGetValue(key, out currentRawValue))
+                if (currentRaw.TryGetValue(key, out var currentRawValue))
                 {
-                    var defaultDictValue = currentWithDefaults[key] as Dictionary<string, object>;
                     var currentDictValue = currentRawValue as Dictionary<string, object>;
-
-                    if (defaultDictValue != null)
+                    if (currentWithDefaults[key] is Dictionary<string, object> defaultDictValue)
                     {
                         if (currentDictValue == null)
                         {
@@ -382,7 +400,9 @@ namespace Oxide.Plugins
                             changed = true;
                         }
                         else if (MaybeUpdateConfigDict(defaultDictValue, currentDictValue))
+                        {
                             changed = true;
+                        }
                     }
                 }
                 else
@@ -426,6 +446,8 @@ namespace Oxide.Plugins
             Log($"Configuration changes saved to {Name}.json");
             Config.WriteObject(_pluginConfig, true);
         }
+
+        #endregion
 
         #endregion
     }
