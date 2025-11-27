@@ -26,6 +26,8 @@ namespace Oxide.Plugins
 
         private Configuration _pluginConfig;
 
+        private object True = true;
+        private object False = false;
         private object CanMoveSuccess = PlayerInventory.CanMoveFromResponse.Success();
 
         #endregion
@@ -116,7 +118,7 @@ namespace Oxide.Plugins
 
             // Return true (standard) to cancel default behavior.
             // This prevents the checkered appearance and allows the item to be dropped.
-            return true;
+            return True;
         }
 
         // This hook is exposed by Engine Parts Durability (EnginePartsDurability).
@@ -124,7 +126,7 @@ namespace Oxide.Plugins
         {
             // The inventory being locked indicates that this plugin is likely controlling the multiplier.
             if (engineStorage.inventory.IsLocked())
-                return false;
+                return False;
 
             return null;
         }
