@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Oxide.Plugins
 {
-    [Info("Auto Engine Parts", "WhiteThunder", "1.0.0")]
+    [Info("Auto Engine Parts", "WhiteThunder", "1.0.1")]
     [Description("Ensures modular car engines always have engine parts which players cannot remove.")]
     internal class AutoEngineParts : CovalencePlugin
     {
