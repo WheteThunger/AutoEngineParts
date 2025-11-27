@@ -26,6 +26,8 @@ namespace Oxide.Plugins
 
         private Configuration _pluginConfig;
 
+        private object CanMoveSuccess = PlayerInventory.CanMoveFromResponse.Success();
+
         #endregion
 
         #region Hooks
@@ -75,9 +77,9 @@ namespace Oxide.Plugins
             if (!IsLocked(engineStorage))
                 return null;
 
-            // Return true to force the module to be moved even though it probably has items.
+            // Return success to force the module to be moved even though it probably has items.
             // The items will be removed in the OnEntityKill hook.
-            return true;
+            return CanMoveSuccess;
         }
 
         private void OnEntityKill(VehicleModuleEngine module)
